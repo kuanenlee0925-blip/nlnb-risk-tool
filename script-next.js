@@ -81,9 +81,14 @@ const questions = [
   {
     id: "o2",
     category: "Operational",
-    text: "Does BODPS have documented backup, continuity, and recovery procedures for critical processing jobs?",
+    text: "Does BODPS have documented backup and disaster recovery procedures?",
     systems: ["BODPS"],
     owner: "IT Infrastructure",
+    responseOptions: [
+      { value: 1, label: "Yes" },
+      { value: 3, label: "Partial" },
+      { value: 5, label: "No" },
+    ],
   },
   {
     id: "o3",
@@ -102,9 +107,14 @@ const questions = [
   {
     id: "o5",
     category: "Operational",
-    text: "Are fourth-party dependencies documented for current banking vendors?",
+    text: "Are fourth-party vendor dependencies documented for NorthGo, PeoplePay, and WeHelp?",
     systems: ["NorthGo", "PeoplePay", "WeHelp"],
     owner: "Vendor Management",
+    responseOptions: [
+      { value: 1, label: "Yes" },
+      { value: 3, label: "Partial" },
+      { value: 5, label: "No" },
+    ],
   },
   {
     id: "o6",
@@ -179,9 +189,14 @@ const questions = [
   {
     id: "t6",
     category: "Technical",
-    text: "Are privileged banking systems protected by access controls, centralized logging, and threat detection?",
+    text: "Are privileged systems protected by role-based access control, centralized logging, and alerting?",
     systems: ["FIN", "BODPS", "CMS", "BeSecure"],
     owner: "Security Operations",
+    responseOptions: [
+      { value: 1, label: "Yes" },
+      { value: 3, label: "Partial" },
+      { value: 5, label: "No" },
+    ],
   },
   {
     id: "t7",
@@ -193,9 +208,14 @@ const questions = [
   {
     id: "t8",
     category: "Technical",
-    text: "Are AML, KYC, FDIC, SEC, and OCC control requirements documented and reflected in NLNB reporting and controls?",
+    text: "Does NLNB have documented controls mapped to FDIC, SEC, OCC, AML, and KYC requirements?",
     systems: ["iReport", "BeSecure", "CMS"],
     owner: "Chief Risk Officer",
+    responseOptions: [
+      { value: 1, label: "Yes" },
+      { value: 3, label: "Partial" },
+      { value: 5, label: "No" },
+    ],
   },
   {
     id: "t9",
@@ -309,7 +329,16 @@ const customRiskForm = document.querySelector("#customRiskForm");
 const runAssessmentBtn = document.querySelector("#runAssessmentBtn");
 const resetAssessmentBtn = document.querySelector("#resetAssessmentBtn");
 
-function createRangeOptions() {
+function createRangeOptions(question) {
+  if (question?.responseOptions) {
+    return question.responseOptions
+      .map(
+        (option) =>
+          `<option value="${option.value}">${option.label}</option>`
+      )
+      .join("");
+  }
+
   return [1, 2, 3, 4, 5]
     .map(
       (value) =>
@@ -342,7 +371,7 @@ function renderQuestions() {
                   <article class="question-card">
                     <label for="${question.id}">${index + 1}. ${question.text}</label>
                     <select id="${question.id}" name="${question.id}">
-                      ${createRangeOptions()}
+                      ${createRangeOptions(question)}
                     </select>
                     <p>Affects: ${question.systems.join(", ")}</p>
                   </article>
