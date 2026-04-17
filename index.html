@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NLNB IT Risk Assessment Tool</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">ETI 302 • Phase 2 • Team GRQ</p>
+          <h1>NLNB IT Risk Assessment Tool</h1>
+          <p class="hero-text">
+            Diagnose operational, business, and technical risk across NLNB's
+            critical systems, vendor ecosystem, and compliance posture.
+          </p>
+          <div class="hero-badges">
+            <span>30 diagnostic questions</span>
+            <span>Live heat map</span>
+            <span>Business + technical recommendations</span>
+          </div>
+        </div>
+
+        <aside class="hero-panel">
+          <h2>Assessment Snapshot</h2>
+          <div class="snapshot-grid">
+            <div class="snapshot-card">
+              <span class="label">Overall Rating</span>
+              <strong id="overallRating">Pending</strong>
+            </div>
+            <div class="snapshot-card">
+              <span class="label">Critical Risks</span>
+              <strong id="criticalCount">0</strong>
+            </div>
+            <div class="snapshot-card">
+              <span class="label">Registry Items</span>
+              <strong id="registryCount">0</strong>
+            </div>
+            <div class="snapshot-card">
+              <span class="label">Last Update</span>
+              <strong id="lastUpdated">Not yet run</strong>
+            </div>
+          </div>
+        </aside>
+      </header>
+
+      <main>
+        <section class="panel criteria-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Analysis Criteria</p>
+              <h2>How NLNB risk is measured</h2>
+            </div>
+            <p class="section-copy">
+              The scoring model blends business continuity, operational
+              resilience, technical exposure, vendor dependence, regulatory
+              readiness, and modernization pressure into one risk profile.
+            </p>
+          </div>
+
+          <div class="criteria-grid">
+            <article class="criteria-card">
+              <h3>Business Continuity</h3>
+              <p>
+                Measures transaction disruption, customer impact, revenue loss,
+                and single-point-of-failure exposure.
+              </p>
+            </article>
+            <article class="criteria-card">
+              <h3>Operational Stability</h3>
+              <p>
+                Looks at outages, incident response readiness, staffing,
+                training, and backup effectiveness.
+              </p>
+            </article>
+            <article class="criteria-card">
+              <h3>Technical Resilience</h3>
+              <p>
+                Evaluates legacy systems, patching, cybersecurity controls,
+                cloud design, and system integration weaknesses.
+              </p>
+            </article>
+            <article class="criteria-card">
+              <h3>Vendor Dependency</h3>
+              <p>
+                Scores third-party and fourth-party concentration, contract
+                leverage, and external platform risk.
+              </p>
+            </article>
+            <article class="criteria-card">
+              <h3>Regulatory Exposure</h3>
+              <p>
+                Reviews AML/KYC, FDIC, SEC, OCC, audit readiness, and data
+                governance gaps.
+              </p>
+            </article>
+            <article class="criteria-card">
+              <h3>Modernization Readiness</h3>
+              <p>
+                Assesses whether NLNB can support AI adoption, cloud migration,
+                and future agentic banking initiatives safely.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Diagnostic Questionnaire</p>
+              <h2>30-question risk assessment</h2>
+            </div>
+            <p class="section-copy">
+              Score each item from 1 to 5. Higher values indicate greater risk.
+            </p>
+          </div>
+
+          <form id="assessmentForm" class="question-groups"></form>
+        </section>
+
+        <section class="results-grid">
+          <section class="panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow">Risk Profile</p>
+                <h2>Category scoring</h2>
+              </div>
+            </div>
+            <div id="categorySummary" class="summary-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow">Heat Map</p>
+                <h2>Likelihood × impact</h2>
+              </div>
+              <p id="heatMapTimestamp" class="tiny-note">Awaiting assessment run.</p>
+            </div>
+            <div id="heatMap" class="heatmap"></div>
+            <div class="heatmap-legend">
+              <span>Low</span>
+              <span>Moderate</span>
+              <span>Elevated</span>
+              <span>High</span>
+              <span>Critical</span>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Risk Registry</p>
+              <h2>System and vendor risk log</h2>
+            </div>
+            <p class="section-copy">
+              Registry entries are generated from the assessment and can be
+              expanded with custom risks. Every item includes a score, owner,
+              explanation, and both recommendation types.
+            </p>
+          </div>
+
+          <div class="toolbar">
+            <button type="button" id="runAssessmentBtn" class="primary-button">
+              Run Assessment
+            </button>
+            <button type="button" id="resetAssessmentBtn" class="secondary-button">
+              Reset Responses
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Risk / System</th>
+                  <th>Owner</th>
+                  <th>Category</th>
+                  <th>Impact</th>
+                  <th>Likelihood</th>
+                  <th>Score</th>
+                  <th>Rating</th>
+                  <th>Updated</th>
+                  <th>Explanation</th>
+                  <th>Business Recommendation</th>
+                  <th>Technical Recommendation</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="registryBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Manual Entry</p>
+              <h2>Add a custom risk</h2>
+            </div>
+            <p class="section-copy">
+              Use this for newly discovered risks, audit findings, or vendor
+              events that need to be tracked immediately.
+            </p>
+          </div>
+
+          <form id="customRiskForm" class="custom-risk-form">
+            <label>
+              Risk Name
+              <input type="text" name="title" placeholder="Example: ATM cash outage cluster" required />
+            </label>
+            <label>
+              Risk Owner
+              <input type="text" name="owner" placeholder="Example: IT Infrastructure Team" required />
+            </label>
+            <label>
+              Category
+              <select name="category" required>
+                <option value="Business">Business</option>
+                <option value="Operational">Operational</option>
+                <option value="Technical">Technical</option>
+                <option value="Vendor">Vendor</option>
+                <option value="Regulatory">Regulatory</option>
+              </select>
+            </label>
+            <label>
+              Impact (1-5)
+              <select name="impact" required></select>
+            </label>
+            <label>
+              Likelihood (1-5)
+              <select name="likelihood" required></select>
+            </label>
+            <label class="wide">
+              Impact Explanation
+              <textarea
+                name="explanation"
+                rows="3"
+                placeholder="Explain why this score was assigned."
+                required
+              ></textarea>
+            </label>
+            <label class="wide">
+              Business Recommendation
+              <textarea
+                name="businessRecommendation"
+                rows="3"
+                placeholder="High-level business action."
+                required
+              ></textarea>
+            </label>
+            <label class="wide">
+              Technical Recommendation
+              <textarea
+                name="technicalRecommendation"
+                rows="3"
+                placeholder="Technical IT action."
+                required
+              ></textarea>
+            </label>
+            <div class="toolbar">
+              <button type="submit" class="primary-button">Add Risk</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
