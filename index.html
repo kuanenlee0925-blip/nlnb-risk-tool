@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NLNB IT Risk Assessment Tool</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">ETI 302 • Phase 2 • Team GRQ</p>
+          <h1>NLNB IT Risk Assessment Tool</h1>
+          <p class="hero-text">
+            Diagnose operational, business, and technical risk across NLNB's
+            critical systems, vendor ecosystem, and compliance posture.
+          </p>
+          <div class="hero-badges">
+            <span>30 diagnostic questions</span>
+            <span>Live heat map</span>
+            <span>Business + technical recommendations</span>
+          </div>
+        </div>
+
+        <aside class="hero-panel">
+          <h2>Assessment Snapshot</h2>
+          <div class="snapshot-grid">
+            <div class="snapshot-card">
+              <span class="label">Overall Rating</span>
+              <strong id="overallRating">Pending</strong>
+            </div>
+            <div class="snapshot-card">
+              <span class="label">Critical Risks</span>
+              <strong id="criticalCount">0</strong>
+            </div>
+            <div class="snapshot-card">
+              <span class="label">Assessment Questions</span>
+              <strong>30</strong>
+            </div>
+            <div class="snapshot-card">
+              <span class="label">Last Update</span>
+              <strong id="lastUpdated">Not yet run</strong>
+            </div>
+          </div>
+        </aside>
+      </header>
+
+      <main>
+        <section class="panel team-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Team GRQ</p>
+              <h2>Meet the project team</h2>
+            </div>
+            <p class="section-copy">
+              Team GRQ (Get Rich Quick) developed this NLNB IT Risk Assessment
+              Tool as part of the ETI 302 case study project.
+            </p>
+          </div>
+
+          <div class="team-grid">
+            <article class="team-card">
+              <img src="assets/team/kuan-en-lee.jpeg" alt="Kuan-en Lee of Team GRQ" />
+              <h3>Kuan-en Lee</h3>
+              <p>Support</p>
+            </article>
+            <article class="team-card">
+              <img src="assets/team/tory-park.jpeg" alt="Tory Park of Team GRQ" />
+              <h3>Tory Park</h3>
+              <p>Leader</p>
+            </article>
+            <article class="team-card">
+              <img src="assets/team/srinidhi-deekonda.jpeg" alt="Srinidhi Deekonda of Team GRQ" />
+              <h3>Srinidhi Deekonda</h3>
+              <p>Strategist / Facilitator</p>
+            </article>
+            <article class="team-card">
+              <img src="assets/team/daniel-simkanin.jpeg" alt="Daniel Simkanin of Team GRQ" />
+              <h3>Daniel Simkanin</h3>
+              <p>Research Lead</p>
+            </article>
+            <article class="team-card">
+              <img src="assets/team/tara-nguyen.png" alt="Tara Nguyen of Team GRQ" />
+              <h3>Tara Nguyen</h3>
+              <p>Analyst</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel recommendations-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Recommendations</p>
+              <h2>Suggested next actions</h2>
+            </div>
+            <p class="section-copy">
+              Run the assessment to generate business and technical
+              recommendations for the highest-risk systems and vendors.
+            </p>
+          </div>
+
+          <div id="recommendationsOutput" class="recommendations-grid"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Diagnostic Questionnaire</p>
+              <h2>30-question risk assessment</h2>
+            </div>
+            <p class="section-copy">
+              Score each item from 1 to 5. Higher values indicate greater risk.
+            </p>
+          </div>
+
+          <form id="assessmentForm" class="question-groups"></form>
+        </section>
+
+        <section class="results-grid">
+          <section class="panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow">Risk Profile</p>
+                <h2>Category scoring</h2>
+              </div>
+            </div>
+            <div id="categorySummary" class="summary-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow">Heat Map</p>
+                <h2>Likelihood × impact</h2>
+              </div>
+              <p id="heatMapTimestamp" class="tiny-note">Awaiting assessment run.</p>
+            </div>
+            <div id="heatMap" class="heatmap"></div>
+            <div class="heatmap-legend">
+              <span>Low</span>
+              <span>Moderate</span>
+              <span>Elevated</span>
+              <span>High</span>
+              <span>Critical</span>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Assessment Controls</p>
+              <h2>Run or reset the tool</h2>
+            </div>
+            <p class="section-copy">
+              Use these controls to generate the current scoring summary and
+              heat map from your responses.
+            </p>
+          </div>
+
+          <div class="toolbar">
+            <button type="button" id="runAssessmentBtn" class="primary-button">
+              Run Assessment
+            </button>
+            <button type="button" id="resetAssessmentBtn" class="secondary-button">
+              Reset Responses
+            </button>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
