@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Review • NLNB IT Risk Assessment Tool</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="subhero">
+        <div>
+          <p class="eyebrow">Team GRQ</p>
+          <h1>Question review admin</h1>
+          <p class="hero-text">Approve or deny submitted question requests.</p>
+        </div>
+        <nav class="page-nav">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="assessment.html">Assessment</a>
+          <a class="nav-link" href="results.html">Results</a>
+          <a class="nav-link active" href="admin.html">Admin</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Admin Access</p>
+              <h2>Sign in with magic link</h2>
+            </div>
+            <p class="section-copy">
+              Use your admin email to receive a Supabase magic link for review access.
+            </p>
+          </div>
+
+          <form id="adminLoginForm" class="request-form">
+            <label class="wide">
+              Admin email
+              <input
+                id="adminEmailInput"
+                name="email"
+                type="email"
+                value="kxl5821@psu.edu"
+                required
+              />
+            </label>
+            <div class="toolbar">
+              <button type="submit" class="primary-button">Send Magic Link</button>
+              <button type="button" id="adminSignOutBtn" class="secondary-button">Sign Out</button>
+            </div>
+          </form>
+          <p id="adminStatusMessage" class="section-copy"></p>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Pending Review</p>
+              <h2>Question requests</h2>
+            </div>
+          </div>
+          <div id="adminRequestsOutput" class="request-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+  </body>
+</html>

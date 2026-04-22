@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assessment • NLNB IT Risk Assessment Tool</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="subhero">
+        <div>
+          <p class="eyebrow">Team GRQ</p>
+          <h1>25-question risk assessment</h1>
+          <p class="hero-text">Answer each question to build the NLNB risk profile.</p>
+        </div>
+        <nav class="page-nav">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link active" href="assessment.html">Assessment</a>
+          <a class="nav-link" href="results.html">Results</a>
+          <a class="nav-link" href="admin.html">Admin</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Diagnostic Questionnaire</p>
+              <h2>25-question risk assessment</h2>
+            </div>
+            <p class="section-copy">
+              Score each item from 1 to 5. Higher values indicate greater risk.
+            </p>
+          </div>
+
+          <form id="assessmentForm" class="question-groups"></form>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Assessment Controls</p>
+              <h2>Run or reset the tool</h2>
+            </div>
+            <p class="section-copy">
+              Generate updated scoring, heat map placement, and recommendations.
+            </p>
+          </div>
+
+          <div class="toolbar">
+            <button type="button" id="runAssessmentBtn" class="primary-button">
+              Run Assessment
+            </button>
+            <button type="button" id="resetAssessmentBtn" class="secondary-button">
+              Reset Responses
+            </button>
+            <a class="secondary-button inline-button" href="results.html">Go To Results</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
