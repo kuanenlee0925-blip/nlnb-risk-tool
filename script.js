@@ -791,13 +791,19 @@ async function submitQuestionRequest() {
     `Team GRQ question request:\n\nQuestion: ${request.questionText}\nCategory: ${request.category}\nSystems: ${request.systems}\nOwner: ${request.owner}\nResponse Type: ${request.responseType}\nReason: ${request.reason}\n\nPlease review this request.`
   );
 
-  if (hasSupabaseConfig) {
-    alert("Question request submitted for review. Click OK to open an optional email draft.");
-  }
-
   questionRequestForm.reset();
   await renderQuestionRequests();
-  window.location.href = `mailto:kxl5821@psu.edu?subject=${subject}&body=${body}`;
+
+  if (hasSupabaseConfig) {
+    const openEmail = confirm(
+      "Question request submitted for review. Would you like to also send an optional email draft?"
+    );
+    if (openEmail) {
+      window.location.href = `mailto:kxl5821@psu.edu?subject=${subject}&body=${body}`;
+    }
+  } else {
+    window.location.href = `mailto:kxl5821@psu.edu?subject=${subject}&body=${body}`;
+  }
 }
 
 function attachEvents() {
