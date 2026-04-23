@@ -14,6 +14,8 @@ const allowedAdminEmails = (SUPABASE_ADMIN_EMAILS || []).map((email) =>
   String(email).trim().toLowerCase()
 );
 
+let showDenied = false;
+
 function setStatus(message) {
   adminStatusMessage.textContent = message;
 }
@@ -45,6 +47,22 @@ async function getSession() {
   return session;
 }
 
+async function deleteRequest(id) {
+  if (!supabase) return;
+  const confirmed = confirm("Permanently delete this denied request? This cannot be undone.");
+  if (!confirmed) return;
+
+  const { error } = await supabase.from(SUPABASE_TABLE).delete().eq("id", id);
+
+  if (error) {
+    setStatus(`Could not delete request: ${normalizeText(error.message)}`);
+    return;
+  }
+
+  setStatus("Request permanently deleted.");
+  renderRequests();
+}
+
 async function renderRequests() {
   if (!hasSupabaseConfig || !supabase) {
     adminRequestsOutput.innerHTML = `
@@ -65,10 +83,16 @@ async function renderRequests() {
     return;
   }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from(SUPABASE_TABLE)
     .select("*")
     .order("created_at", { ascending: false });
+
+  if (!showDenied) {
+    query = query.neq("status", "denied");
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     adminRequestsOutput.innerHTML = `
@@ -79,18 +103,32 @@ async function renderRequests() {
     return;
   }
 
+  const toggleLabel = showDenied ? "Hide Denied" : "Show Denied";
+  const toggleHtml = `
+    <div class="toolbar" style="margin-bottom: 18px;">
+      <button type="button" id="toggleDeniedBtn" class="secondary-button">${toggleLabel}</button>
+    </div>
+  `;
+
   if (!data.length) {
     adminRequestsOutput.innerHTML = `
+      ${toggleHtml}
       <article class="request-card">
-        <p>No requests found.</p>
+        <p>${showDenied ? "No requests found." : "No pending or approved requests. Use \"Show Denied\" to view denied ones."}</p>
       </article>
     `;
+    document.querySelector("#toggleDeniedBtn").addEventListener("click", () => {
+      showDenied = !showDenied;
+      renderRequests();
+    });
     return;
   }
 
-  adminRequestsOutput.innerHTML = data
-    .map(
-      (request) => `
+  adminRequestsOutput.innerHTML =
+    toggleHtml +
+    data
+      .map(
+        (request) => `
         <article class="request-card">
           <div class="recommendation-meta">
             <span class="pill">${normalizeText(request.category)}</span>
@@ -103,13 +141,26 @@ async function renderRequests() {
           <p><strong>Reason:</strong> ${normalizeText(request.reason)}</p>
           <p><strong>Requested:</strong> ${formatDate(request.created_at)}</p>
           <div class="toolbar">
-            <button type="button" class="primary-button approve-request" data-id="${request.id}">Approve</button>
-            <button type="button" class="secondary-button deny-request" data-id="${request.id}">Deny</button>
+            ${
+              request.status !== "approved"
+                ? `<button type="button" class="primary-button approve-request" data-id="${request.id}">Approve</button>`
+                : ""
+            }
+            ${
+              request.status !== "denied"
+                ? `<button type="button" class="secondary-button deny-request" data-id="${request.id}">Deny</button>`
+                : `<button type="button" class="remove-button delete-request" data-id="${request.id}" style="padding: 10px 16px; font-weight: 800; background: rgba(139,30,30,0.12); color: #7d1818; border-radius: 999px; cursor: pointer;">Delete</button>`
+            }
           </div>
         </article>
       `
-    )
-    .join("");
+      )
+      .join("");
+
+  document.querySelector("#toggleDeniedBtn").addEventListener("click", () => {
+    showDenied = !showDenied;
+    renderRequests();
+  });
 
   document.querySelectorAll(".approve-request").forEach((button) => {
     button.addEventListener("click", () => updateRequestStatus(button.dataset.id, "approved"));
@@ -117,6 +168,10 @@ async function renderRequests() {
 
   document.querySelectorAll(".deny-request").forEach((button) => {
     button.addEventListener("click", () => updateRequestStatus(button.dataset.id, "denied"));
+  });
+
+  document.querySelectorAll(".delete-request").forEach((button) => {
+    button.addEventListener("click", () => deleteRequest(button.dataset.id));
   });
 }
 
