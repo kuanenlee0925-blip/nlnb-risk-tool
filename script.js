@@ -534,22 +534,23 @@ function getCategoryStats() {
 }
 
 function renderCategorySummary() {
-  if (!categorySummary) return;
   const stats = getCategoryStats();
-  categorySummary.innerHTML = stats
-    .map(
-      (stat) => `
-        <article class="summary-card">
-          <h3>${stat.category}</h3>
-          <div class="score-line">
-            <span>${stat.score}/100</span>
-            <span class="rating ${getRatingClass(stat.rating)}">${stat.rating}</span>
-          </div>
-          <div class="bar"><span style="width:${stat.score}%"></span></div>
-        </article>
-      `
-    )
-    .join("");
+  if (categorySummary) {
+    categorySummary.innerHTML = stats
+      .map(
+        (stat) => `
+          <article class="summary-card">
+            <h3>${stat.category}</h3>
+            <div class="score-line">
+              <span>${stat.score}/100</span>
+              <span class="rating ${getRatingClass(stat.rating)}">${stat.rating}</span>
+            </div>
+            <div class="bar"><span style="width:${stat.score}%"></span></div>
+          </article>
+        `
+      )
+      .join("");
+  }
 
   const overall = Math.round(
     stats.reduce((sum, item) => sum + item.score, 0) / stats.length
@@ -791,19 +792,13 @@ async function submitQuestionRequest() {
     `Team GRQ question request:\n\nQuestion: ${request.questionText}\nCategory: ${request.category}\nSystems: ${request.systems}\nOwner: ${request.owner}\nResponse Type: ${request.responseType}\nReason: ${request.reason}\n\nPlease review this request.`
   );
 
+  if (hasSupabaseConfig) {
+    alert("Question request submitted for review. Click OK to open an optional email draft.");
+  }
+
   questionRequestForm.reset();
   await renderQuestionRequests();
-
-  if (hasSupabaseConfig) {
-    const openEmail = confirm(
-      "Question request submitted for review. Would you like to also send an optional email draft?"
-    );
-    if (openEmail) {
-      window.location.href = `mailto:kxl5821@psu.edu?subject=${subject}&body=${body}`;
-    }
-  } else {
-    window.location.href = `mailto:kxl5821@psu.edu?subject=${subject}&body=${body}`;
-  }
+  window.location.href = `mailto:kxl5821@psu.edu?subject=${subject}&body=${body}`;
 }
 
 function attachEvents() {
