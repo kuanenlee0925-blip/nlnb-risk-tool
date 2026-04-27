@@ -436,6 +436,24 @@ const riskDefinitions = [
   },
 ];
 
+const riskTargets = {
+  "R-01": { impact: 5, likelihood: 5, cellLabel: "R-01 FIN Failure" },
+  "R-02": { impact: 3, likelihood: 3, cellLabel: "R-02 Training Gap" },
+  "R-03": { impact: 5, likelihood: 4, cellLabel: "R-03 Legacy Servers" },
+  "R-04": { impact: 4, likelihood: 5, cellLabel: "R-04 Vendor Lock-In" },
+  "R-05": { impact: 4, likelihood: 3, cellLabel: "R-05 Competition Risk" },
+  "R-06": { impact: 5, likelihood: 3, cellLabel: "R-06 BODPS Integrity" },
+  "R-07": { impact: 5, likelihood: 4, cellLabel: "R-07 CMS Breach" },
+  "R-08": { impact: 5, likelihood: 4, cellLabel: "R-08 AML / KYC Compliance" },
+  "R-09": { impact: 4, likelihood: 4, cellLabel: "R-09 Fourth-Party Gap" },
+  "R-10": { impact: 3, likelihood: 3, cellLabel: "R-10 AI Readiness" },
+  "R-11": { impact: 4, likelihood: 4, cellLabel: "R-11 DORA Gap" },
+  "R-12": { impact: 4, likelihood: 3, cellLabel: "R-12 Hybrid Instability" },
+  "R-13": { impact: 4, likelihood: 4, cellLabel: "R-13 NorthGo Outage" },
+  "R-14": { impact: 5, likelihood: 4, cellLabel: "R-14 Network Vulnerability" },
+  "R-15": { impact: 3, likelihood: 2, cellLabel: "R-15 Crypto Risk" },
+};
+
 const state = {
   answers: {},
   generatedRisks: [],
@@ -629,6 +647,11 @@ function buildImpactExplanation(name, impact, likelihood, score, drivers) {
 
 function calculateGeneratedRisks() {
   return riskDefinitions.map((risk) => {
+    const target = riskTargets[risk.id] || {
+      impact: 3,
+      likelihood: 3,
+      cellLabel: `${risk.id} ${risk.title}`,
+    };
     const relatedQuestions = risk.questionIds
       .map((questionId) => questions.find((question) => question.id === questionId))
       .filter(Boolean);
@@ -641,10 +664,21 @@ function calculateGeneratedRisks() {
     const highDriverQuestions = relatedQuestions
       .filter((question) => Number(state.answers[question.id] || 3) >= 4)
       .map((question) => question.text);
-    const impact = Math.max(1, Math.min(5, Math.round(average + 0.2)));
+    const normalizedShift = average - 3;
+    const impact = Math.max(
+      1,
+      Math.min(5, Math.round(target.impact + normalizedShift * 0.9))
+    );
     const likelihood = Math.max(
       1,
-      Math.min(5, Math.round(average + (highDriverQuestions.length >= 2 ? 0.4 : 0)))
+      Math.min(
+        5,
+        Math.round(
+          target.likelihood +
+            normalizedShift * 0.9 +
+            (highDriverQuestions.length >= 2 ? 0.3 : 0)
+        )
+      )
     );
     const score = Math.round(((impact * likelihood) / 25) * 100);
     const rating = getRating(score);
@@ -653,6 +687,7 @@ function calculateGeneratedRisks() {
       id: `generated-${risk.id}`,
       riskCode: risk.id,
       title: risk.title,
+      cellLabel: target.cellLabel,
       owner: risk.owner,
       category: risk.category,
       impact,
@@ -748,7 +783,7 @@ function renderHeatMap() {
   }
 
   allRisks.forEach((risk) => {
-    cellCounts[`${risk.impact}-${risk.likelihood}`].push(risk.title);
+    cellCounts[`${risk.impact}-${risk.likelihood}`].push(risk.cellLabel || risk.title);
   });
 
   heatMap.innerHTML = Array.from({ length: 25 }, (_, index) => {
